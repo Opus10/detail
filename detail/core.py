@@ -513,7 +513,7 @@ def detail(path=None):
             utils.get_detail_note_root()
             / f'{now.strftime("%Y-%m-%d")}-{str(uuid.uuid4())[:6]}.yaml'
         )
-        path.parent.mkdir(exist_ok=True)
+        path.parent.mkdir(exist_ok=True, parents=True)
 
     schema = _load_note_schema()
     entry = schema.prompt(defaults=defaults)

@@ -48,6 +48,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
+    'sphinx_click.ext',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -184,7 +185,7 @@ texinfo_documents = [
         u'detail Documentation',
         author,
         'detail',
-        'Build automations off of structured notes in your project',
+        '',
         'Miscellaneous',
     )
 ]
