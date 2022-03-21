@@ -25,7 +25,10 @@ fail_under = 100
 [tool.poetry]
 name = "detail"
 packages = [
-  { include = "detail" }
+  { include = "detail" },
+]
+exclude = [
+  "detail/tests"
 ]
 version = "0.0.0"
 description = "Build automations off of structured notes in your project"
@@ -48,6 +51,14 @@ documentation = "https://detail.readthedocs.io"
 
 [tool.poetry.dependencies]
 python = ">=3.7.0,<4"
+importlib_metadata = { version = ">=4", python = "~3.7" }
+click = ">=7.0"
+click-default-group = ">=1.2.2"
+formaldict = ">=0.2.0"
+jinja2 = ">=2.10.3"
+python-dateutil = ">=2.8.1"
+pyyaml = ">=5.1.2"
+requests = ">=2.22.0"
 
 [tool.poetry.dev-dependencies]
 black = "22.1.0"
@@ -60,10 +71,16 @@ flake8-mutable = "1.2.0"
 git-tidy = "1.1.1"
 pytest = "6.2.5"
 pytest-cov = "3.0.0"
+pytest-mock = "3.7.0"
+pytest-responses = "0.5.0"
 Sphinx = "4.4.0"
+sphinx-click = "3.0.0"
 sphinx-rtd-theme = "1.0.0"
 temple = "*"
 tox = "3.24.5"
+
+[tool.poetry.scripts]
+detail = 'detail.cli:main'
 
 [tool.pytest.ini_options]
 xfail_strict = true
