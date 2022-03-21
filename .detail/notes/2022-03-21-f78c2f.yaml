@@ -1,0 +1,9 @@
+"description": |-
+  This bug affects 10000 users on a day
+  to day basis
+"jira": |-
+  WEB-2222
+"summary": |-
+  This bug is bad
+"type": |-
+  bug
