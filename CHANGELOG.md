@@ -1,5 +1,13 @@
 # Changelog
-## 0.1.1 (2022-03-20)
+## 0.2.0 (2022-03-22)
+### Feature
+  - Change linting behavior, passing if no commits exist [Wes Kendall, 47b4908]
+
+    If no commits exist during ``detail lint``, linting passes
+    since there is nothing to check. If commits exist and there are no
+    notes, linting fails like before.
+
+## 0.1.1 (2022-03-21)
 ### Trivial
   - Added docs and a small tutorial [Wes Kendall, fa2972d]
 
