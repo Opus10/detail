@@ -379,7 +379,6 @@ def _git_log(git_log_cmd):
         'committer_email: %ce%n'
         'committer_date: %cd%n'
         f'%n{delimiter}"'
-        f' -- {utils.get_detail_note_root()}'
     )
 
     commit_schema = _load_commit_schema()
@@ -470,7 +469,7 @@ class NoteRange(Notes):
         if reverse:
             git_log_cmd += ' --reverse'
 
-        commits = {commit['sha']: commit for commit in _git_log(git_log_cmd)}
+        self.commits = {commit['sha']: commit for commit in _git_log(git_log_cmd)}
         note_log = _note_log(git_log_cmd)
 
         self._range = range
@@ -482,7 +481,7 @@ class NoteRange(Notes):
                     data,
                     path=path,
                     schema=schema,
-                    commit=Commit(commits[sha], tag_match=tag_match),
+                    commit=Commit(self.commits[sha], tag_match=tag_match),
                 )
                 for path, data, sha in note_log
                 if data
@@ -529,6 +528,12 @@ def lint(range=''):
     """
     Lint notes against a range (branch, sha, etc).
 
+    Linting passes when either succeed:
+
+    - No commits are in the range.
+    - Commits are found, and all notes pass linting. At least one
+      note must be in the commit range.
+
     Args:
         range (str, default=''): The git revision range against which linting
             happens. The special value of ":github/pr" can be used to lint
@@ -547,7 +552,12 @@ def lint(range=''):
         and the associated `NoteRange`
     """
     notes = NoteRange(range=range)
-    return not notes.filter('is_valid', False), notes
+    if not notes.commits:
+        return True, notes
+    elif not notes:
+        return False, notes
+    else:
+        return not notes.filter('is_valid', False), notes
 
 
 def log(

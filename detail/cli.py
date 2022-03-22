@@ -55,17 +55,17 @@ def lint(ctx, range):
     range = ' '.join(range)
     is_valid, notes = core.lint(range)
 
-    if not notes:
-        click.echo('No notes were found. Run "detail" to create one', err=True)
-        ctx.exit(1)
-
     if not is_valid:
-        failures = notes.filter('is_valid', False)
-        err_msg = f'{len(failures)} out of {len(notes)} notes have failed linting:'
-        click.echo(click.style(err_msg, fg='red'), err=True)
+        if not notes:
+            click.echo('No notes were found. Run "detail" to create one', err=True)
+        else:
+            failures = notes.filter('is_valid', False)
+            err_msg = f'{len(failures)} out of {len(notes)} notes have failed linting:'
+            click.echo(click.style(err_msg, fg='red'), err=True)
 
-        for failure in failures:
-            click.echo(f'{failure.path}: {failure.validation_errors}', err=True)
+            for failure in failures:
+                click.echo(f'{failure.path}: {failure.validation_errors}', err=True)
+
         ctx.exit(1)
 
 

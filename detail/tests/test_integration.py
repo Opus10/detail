@@ -344,9 +344,20 @@ def test_detail_update(mocker):
 @pytest.mark.usefixtures('detail_repo')
 def test_lint():
     """Tests core.lint()"""
-    passed, commits = core.lint()
+    passed, notes = core.lint()
     assert not passed
-    assert len(commits) == 5
+    assert len(notes) == 5
+    assert len(notes.commits) == 6
+
+    passed, notes = core.lint(range='HEAD..')
+    assert passed
+    assert len(notes) == 0
+    assert len(notes.commits) == 0
+
+    passed, notes = core.lint(range='HEAD~1..')
+    assert not passed
+    assert len(notes) == 0
+    assert len(notes.commits) == 1
 
 
 @pytest.mark.parametrize('output', [None, 'output_file', io.StringIO(), ':github/pr'])

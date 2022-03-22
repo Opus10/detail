@@ -101,6 +101,14 @@ to validate. Normally this is done against the branch over which a pull
 request will be submitted. For example, ``detail lint origin/develop..``
 will lint all of the commits on your branch since ``origin/develop``.
 
+Linting will pass if any of the following are true:
+
+1. There are no commits in the range. For example, running ``detail lint main..``
+   while on the ``main`` branch will result in linting passing since there are
+   no commits.
+2. There is at least one commit, at least one note, and all notes present
+   in the commit range adhere to the ``detail`` schema.
+
 ``detail`` comes built in with Github support. In order to lint against all
 of the commits against the base branch of an open pull request, run
 ``detail lint :github/pr``. The special ":github/pr" range tells
