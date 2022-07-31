@@ -1,4 +1,8 @@
 # Changelog
+## 0.2.1 (2022-07-30)
+### Trivial
+  - Update with the latest Python template, fixing doc builds [Wes Kendall, 17df8b2]
+
 ## 0.2.0 (2022-03-22)
 ### Feature
   - Change linting behavior, passing if no commits exist [Wes Kendall, 47b4908]
