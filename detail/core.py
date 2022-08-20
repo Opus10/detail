@@ -34,7 +34,7 @@ DEFAULT_LOG_TEMPLATE = """
 {% endfor %}
 """
 # The special range value for git ranges against github pull requests
-GITHUB_PR = ':github/pr'
+GITHUB_PR = ":github/pr"
 
 
 def _output(*, value, path):
@@ -51,7 +51,7 @@ def _output(*, value, path):
             ``None``, nothing is written.
     """
     if isinstance(path, str) and path != GITHUB_PR:
-        with open(path, 'w+') as f:
+        with open(path, "w+") as f:
             f.write(value)
     elif isinstance(path, str) and path == GITHUB_PR:
         github.comment(value)
@@ -64,46 +64,46 @@ def _load_commit_schema(path=None, full=True):
     """Loads the schema expected for parsed commit messages"""
     schema = [
         {
-            'label': 'sha',
-            'name': 'SHA',
-            'help': 'Full SHA of the commit.',
-            'type': 'string',
+            "label": "sha",
+            "name": "SHA",
+            "help": "Full SHA of the commit.",
+            "type": "string",
         },
         {
-            'label': 'author_name',
-            'name': 'Author Name',
-            'help': 'The author name of the commit.',
-            'type': 'string',
+            "label": "author_name",
+            "name": "Author Name",
+            "help": "The author name of the commit.",
+            "type": "string",
         },
         {
-            'label': 'author_email',
-            'name': 'Author Email',
-            'help': 'The author email of the commit.',
-            'type': 'string',
+            "label": "author_email",
+            "name": "Author Email",
+            "help": "The author email of the commit.",
+            "type": "string",
         },
         {
-            'label': 'author_date',
-            'name': 'Author Date',
-            'help': 'The time at which the commit was authored.',
-            'type': 'datetime',
+            "label": "author_date",
+            "name": "Author Date",
+            "help": "The time at which the commit was authored.",
+            "type": "datetime",
         },
         {
-            'label': 'committer_name',
-            'name': 'Committer Name',
-            'help': 'The name of the person who performed the commit.',
-            'type': 'string',
+            "label": "committer_name",
+            "name": "Committer Name",
+            "help": "The name of the person who performed the commit.",
+            "type": "string",
         },
         {
-            'label': 'committer_email',
-            'name': 'Committer Email',
-            'help': 'The email of the person who performed the commit.',
-            'type': 'string',
+            "label": "committer_email",
+            "name": "Committer Email",
+            "help": "The email of the person who performed the commit.",
+            "type": "string",
         },
         {
-            'label': 'committer_date',
-            'name': 'Committer Date',
-            'help': 'The time at which the commit was performed.',
-            'type': 'datetime',
+            "label": "committer_date",
+            "name": "Committer Date",
+            "help": "The time at which the commit was performed.",
+            "type": "datetime",
         },
     ]
 
@@ -115,7 +115,7 @@ def _load_note_schema(path=None):
     path = path or utils.get_detail_schema_path()
 
     try:
-        with open(path, 'r') as schema_f:
+        with open(path, "r") as schema_f:
             schema = yaml.safe_load(schema_f)
     except IOError:
         raise exceptions.SchemaError(
@@ -123,8 +123,8 @@ def _load_note_schema(path=None):
         )
 
     for entry in schema:
-        if 'label' not in entry:
-            raise exceptions.SchemaError(f'Entry in schema does not have label - {entry}')
+        if "label" not in entry:
+            raise exceptions.SchemaError(f"Entry in schema does not have label - {entry}")
 
     return formaldict.Schema(schema)
 
@@ -144,16 +144,16 @@ class Tag(collections.UserString):
         Returns:
             Tag: A constructed tag or ``None`` if no tags contain the commit.
         """
-        describe_cmd = f'git describe {sha} --contains'
+        describe_cmd = f"git describe {sha} --contains"
         if tag_match:
-            describe_cmd += f' --match={tag_match}'
+            describe_cmd += f" --match={tag_match}"
 
         rev = (
             utils.shell_stdout(describe_cmd, check=False, stderr=subprocess.PIPE)
-            .replace('~', ':')
-            .replace('^', ':')
+            .replace("~", ":")
+            .replace("^", ":")
         )
-        return cls(rev.split(':')[0]) if rev else None
+        return cls(rev.split(":")[0]) if rev else None
 
     @property
     def date(self):
@@ -163,10 +163,10 @@ class Tag(collections.UserString):
         Returns:
             datetime: The tag parsed as a datetime object.
         """
-        if not hasattr(self, '_date'):
+        if not hasattr(self, "_date"):
             try:
                 self._date = dateutil.parser.parse(
-                    utils.shell_stdout(f'git log -1 --format=%ad {self}')
+                    utils.shell_stdout(f"git log -1 --format=%ad {self}")
                 )
             except dateutil.parser.ParserError:
                 self._date = None
@@ -196,7 +196,7 @@ class Commit(collections.UserDict):
     @property
     def tag(self):
         """Returns a `Tag` that contains the commit"""
-        if not hasattr(self, '_tag'):
+        if not hasattr(self, "_tag"):
             self._tag = Tag.from_sha(self.sha, tag_match=self._tag_match)
 
         return self._tag
@@ -222,7 +222,7 @@ class Note(collections.UserDict):
                 return self.schema_data[attr]
             elif attr in self._schema:
                 return None
-            elif self.commit and attr.startswith('commit_') and hasattr(self.commit, attr[7:]):
+            elif self.commit and attr.startswith("commit_") and hasattr(self.commit, attr[7:]):
                 return getattr(self.commit, attr[7:])
             else:
                 raise
@@ -352,7 +352,7 @@ class Notes(collections.abc.Sequence):
 
 def _get_pull_request_range():
     base = github.get_pull_request_base()
-    return f'{base}..'
+    return f"{base}.."
 
 
 def _git_log(git_log_cmd):
@@ -367,17 +367,17 @@ def _git_log(git_log_cmd):
     Returns:
         List: Commit dictionaries
     """
-    delimiter = '\n<-------->'
+    delimiter = "\n<-------->"
     git_log_stdout = utils.shell_stdout(
-        f'{git_log_cmd} '
+        f"{git_log_cmd} "
         '--format="'
-        'sha: %H%n'
-        'author_name: %an%n'
-        'author_email: %ae%n'
-        'author_date: %ad%n'
-        'committer_name: %cn%n'
-        'committer_email: %ce%n'
-        'committer_date: %cd%n'
+        "sha: %H%n"
+        "author_name: %an%n"
+        "author_email: %ae%n"
+        "author_date: %ad%n"
+        "committer_name: %cn%n"
+        "committer_email: %ce%n"
+        "committer_date: %cd%n"
         f'%n{delimiter}"'
     )
 
@@ -401,19 +401,19 @@ def _note_log(git_log_cmd):
     Returns:
         Dict: The file paths for each git sha
     """
-    delimiter = '<-------->'
+    delimiter = "<-------->"
     git_log_stdout = utils.shell_stdout(
-        f'{git_log_cmd} '
+        f"{git_log_cmd} "
         f'--format="{delimiter}sha: %H"'
-        f' --diff-filter=A --raw -- {utils.get_detail_note_root()}'
+        f" --diff-filter=A --raw -- {utils.get_detail_note_root()}"
     )
 
     shas_to_files = {}
     msgs = [msg for msg in git_log_stdout.split(delimiter) if msg]
     for msg in msgs:
-        split = msg.split('\n')
+        split = msg.split("\n")
         sha = split[0][4:].strip()
-        files = [line.split('\t')[1].strip() for line in split[1:] if line.strip()]
+        files = [line.split("\t")[1].strip() for line in split[1:] if line.strip()]
         shas_to_files[sha] = files
 
     notes = []
@@ -446,7 +446,7 @@ class NoteRange(Notes):
     from the current branch (if found).
     """
 
-    def __init__(self, range='', tag_match=None, before=None, after=None, reverse=False):
+    def __init__(self, range="", tag_match=None, before=None, after=None, reverse=False):
         self._commit_schema = _load_commit_schema()
         self._tag_match = tag_match
         self._before = before
@@ -459,17 +459,17 @@ class NoteRange(Notes):
             range = _get_pull_request_range()
 
         # Ensure any remotes are fetched
-        utils.shell('git --no-pager fetch -q')
+        utils.shell("git --no-pager fetch -q")
 
-        git_log_cmd = f'git --no-pager log {range} --no-merges'
+        git_log_cmd = f"git --no-pager log {range} --no-merges"
         if before:
-            git_log_cmd += f' --before={before}'
+            git_log_cmd += f" --before={before}"
         if after:
-            git_log_cmd += f' --after={after}'
+            git_log_cmd += f" --after={after}"
         if reverse:
-            git_log_cmd += ' --reverse'
+            git_log_cmd += " --reverse"
 
-        self.commits = {commit['sha']: commit for commit in _git_log(git_log_cmd)}
+        self.commits = {commit["sha"]: commit for commit in _git_log(git_log_cmd)}
         note_log = _note_log(git_log_cmd)
 
         self._range = range
@@ -516,15 +516,15 @@ def detail(path=None):
 
     schema = _load_note_schema()
     entry = schema.prompt(defaults=defaults)
-    serialized = yaml.dump(entry.data, default_style='|')
+    serialized = yaml.dump(entry.data, default_style="|")
 
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         f.write(serialized)
 
     return path, entry
 
 
-def lint(range=''):
+def lint(range=""):
     """
     Lint notes against a range (branch, sha, etc).
 
@@ -557,12 +557,12 @@ def lint(range=''):
     elif not notes:
         return False, notes
     else:
-        return not notes.filter('is_valid', False), notes
+        return not notes.filter("is_valid", False), notes
 
 
 def log(
-    range='',
-    style='default',
+    range="",
+    style="default",
     template=None,
     tag_match=None,
     before=None,
@@ -619,12 +619,12 @@ def log(
             loader=jinja2.FileSystemLoader(utils.get_detail_root()),
             trim_blocks=True,
         )
-        template_file = 'log.tpl' if style == 'default' else f'log_{style}.tpl'
+        template_file = "log.tpl" if style == "default" else f"log_{style}.tpl"
 
         try:
             template = env.get_template(template_file)
         except jinja2.exceptions.TemplateNotFound:
-            if style == 'default':
+            if style == "default":
                 # Use the default template if the user didn't provide one
                 template = jinja2.Template(DEFAULT_LOG_TEMPLATE, trim_blocks=True)
             else:
