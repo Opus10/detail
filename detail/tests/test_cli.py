@@ -8,7 +8,7 @@ from detail import cli
 
 @pytest.fixture
 def mock_exit(mocker):
-    yield mocker.patch('sys.exit', autospec=True)
+    yield mocker.patch("sys.exit", autospec=True)
 
 
 @pytest.fixture
@@ -17,31 +17,31 @@ def mock_successful_exit(mock_exit):
     mock_exit.assert_called_once_with(0)
 
 
-@pytest.mark.usefixtures('mock_successful_exit')
+@pytest.mark.usefixtures("mock_successful_exit")
 def test_detail_v(mocker, capsys):
     """Test calling detail -v"""
-    mocker.patch.object(sys, 'argv', ['detail', '-v'])
+    mocker.patch.object(sys, "argv", ["detail", "-v"])
 
     cli.main()
 
     out, _ = capsys.readouterr()
-    assert out.startswith('detail ')
+    assert out.startswith("detail ")
 
 
 @pytest.mark.parametrize(
-    'command_args, expected_detail_call',
+    "command_args, expected_detail_call",
     [
         ([], mock.call(path=None)),
-        (['path'], mock.call(path='path')),
+        (["path"], mock.call(path="path")),
     ],
 )
 def test_detail(mock_exit, mocker, command_args, expected_detail_call):
     """Test calling detail"""
-    mocker.patch.object(sys, 'argv', ['detail'] + command_args)
+    mocker.patch.object(sys, "argv", ["detail"] + command_args)
     patched_detail = mocker.patch(
-        'detail.core.detail',
+        "detail.core.detail",
         autospec=True,
-        return_value=('path', {}),
+        return_value=("path", {}),
     )
 
     cli.main()
@@ -50,16 +50,16 @@ def test_detail(mock_exit, mocker, command_args, expected_detail_call):
 
 
 @pytest.mark.parametrize(
-    'command_args, lint_is_valid, expected_lint_call, expected_stderr',
+    "command_args, lint_is_valid, expected_lint_call, expected_stderr",
     [
-        ([], True, mock.call(''), ''),
-        (['range'], True, mock.call('range'), ''),
+        ([], True, mock.call(""), ""),
+        (["range"], True, mock.call("range"), ""),
         (
-            ['range'],
+            ["range"],
             False,
-            mock.call('range'),
+            mock.call("range"),
             (
-                '2 out of 2 notes have failed linting:\n'
+                "2 out of 2 notes have failed linting:\n"
                 ".detail/1.yaml: ['error1', 'error2']\n.detail/2.yaml: ['error3', 'error4']\n"
             ),
         ),
@@ -75,16 +75,16 @@ def test_lint(
     expected_stderr,
 ):
     """Test calling detail lint"""
-    mocker.patch.object(sys, 'argv', ['detail', 'lint'] + command_args)
+    mocker.patch.object(sys, "argv", ["detail", "lint"] + command_args)
     notes = mocker.MagicMock(
         __len__=lambda a: 2,
         filter=lambda a, b: [
-            mocker.Mock(path='.detail/1.yaml', validation_errors=['error1', 'error2']),
-            mocker.Mock(path='.detail/2.yaml', validation_errors=['error3', 'error4']),
+            mocker.Mock(path=".detail/1.yaml", validation_errors=["error1", "error2"]),
+            mocker.Mock(path=".detail/2.yaml", validation_errors=["error3", "error4"]),
         ],
     )
     patched_lint = mocker.patch(
-        'detail.core.lint', autospec=True, return_value=(lint_is_valid, notes)
+        "detail.core.lint", autospec=True, return_value=(lint_is_valid, notes)
     )
 
     cli.main()
@@ -96,13 +96,13 @@ def test_lint(
 
 
 @pytest.mark.parametrize(
-    'command_args, expected_log_call',
+    "command_args, expected_log_call",
     [
         (  # Verify default parameters are filled out
             [],
             mock.call(
-                '',
-                style='default',
+                "",
+                style="default",
                 template=None,
                 tag_match=None,
                 before=None,
@@ -113,33 +113,33 @@ def test_lint(
         ),
         (  # Verify default parameters are filled out
             [
-                'range',
-                '--style=new',
-                '--tag-match=pattern',
-                '--before=before',
-                '--after=after',
-                '--reverse',
-                '-o',
-                'file',
+                "range",
+                "--style=new",
+                "--tag-match=pattern",
+                "--before=before",
+                "--after=after",
+                "--reverse",
+                "-o",
+                "file",
             ],
             mock.call(
-                'range',
-                style='new',
+                "range",
+                style="new",
                 template=None,
-                tag_match='pattern',
-                before='before',
-                after='after',
+                tag_match="pattern",
+                before="before",
+                after="after",
                 reverse=True,
-                output='file',
+                output="file",
             ),
         ),
     ],
 )
-@pytest.mark.usefixtures('mock_successful_exit')
+@pytest.mark.usefixtures("mock_successful_exit")
 def test_log(mocker, command_args, expected_log_call):
     """Test calling detail log"""
-    mocker.patch.object(sys, 'argv', ['detail', 'log'] + command_args)
-    patched_commit = mocker.patch('detail.core.log', autospec=True)
+    mocker.patch.object(sys, "argv", ["detail", "log"] + command_args)
+    patched_commit = mocker.patch("detail.core.log", autospec=True)
 
     cli.main()
 

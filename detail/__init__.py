@@ -10,13 +10,13 @@ from detail.version import __version__
 
 
 __all__ = [
-    'Commit',
-    'Note',
-    'NoteRange',
-    'Notes',
-    'lint',
-    'log',
-    'detail',
-    'Tag',
-    '__version__',
+    "Commit",
+    "Note",
+    "NoteRange",
+    "Notes",
+    "lint",
+    "log",
+    "detail",
+    "Tag",
+    "__version__",
 ]
