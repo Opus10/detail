@@ -88,6 +88,7 @@ workflows:
           requires:
             - test
             - lint
+            - type_check
           filters:
             branches:
               only: main
