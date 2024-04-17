@@ -1,17 +1,17 @@
 """Integration tests for detail"""
-from contextlib import ExitStack as does_not_raise
+
 import io
 import os
 import pathlib
 import shutil
+from contextlib import ExitStack as does_not_raise
 
 import formaldict
 import jinja2.exceptions
 import pytest
 import yaml
 
-from detail import core
-from detail import utils
+from detail import core, utils
 
 
 @pytest.fixture()
@@ -188,7 +188,7 @@ def test_commit_properties_and_range_filtering(mocker):
     assert invalid_note.type == "feature"
     assert not invalid_note.is_valid
     with pytest.raises(AttributeError):
-        invalid_note.invalid_attribute
+        invalid_note.invalid_attribute  # noqa
     assert invalid_note.jira is None
     assert invalid_note.commit_tag is None
 

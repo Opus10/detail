@@ -6,9 +6,7 @@ import os
 
 import requests
 
-from detail import exceptions
-from detail import utils
-
+from detail import exceptions, utils
 
 GITHUB_API_TOKEN_ENV_VAR = "GITHUB_API_TOKEN"
 GITHUB_USERNAME_ENV_VAR = "GITHUB_USERNAME"

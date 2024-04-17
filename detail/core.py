@@ -2,22 +2,22 @@
 The core detail API
 """
 
+from __future__ import annotations
+
 import collections.abc
 import datetime as dt
 import io
 import re
 import subprocess
 import uuid
+from typing import Optional, Tuple
 
 import dateutil.parser
 import formaldict
 import jinja2
 import yaml
 
-from detail import exceptions
-from detail import github
-from detail import utils
-
+from detail import exceptions, github, utils
 
 # The default log Jinja template
 DEFAULT_LOG_TEMPLATE = """
@@ -117,10 +117,10 @@ def _load_note_schema(path=None):
     try:
         with open(path, "r") as schema_f:
             schema = yaml.safe_load(schema_f)
-    except IOError:
+    except IOError as exc:
         raise exceptions.SchemaError(
             'Must create a schema.yaml in the ".detail" directory of your project'
-        )
+        ) from exc
 
     for entry in schema:
         if "label" not in entry:
@@ -136,13 +136,13 @@ class Tag(collections.UserString):
         self.data = tag
 
     @classmethod
-    def from_sha(cls, sha, tag_match=None):
+    def from_sha(cls, sha, tag_match=None) -> Optional[Tag]:
         """
         Create a Tag object from a sha or return None if there is no
         associated tag
 
         Returns:
-            Tag: A constructed tag or ``None`` if no tags contain the commit.
+            A constructed tag or ``None`` if no tags contain the commit.
         """
         describe_cmd = f"git describe {sha} --contains"
         if tag_match:
@@ -156,12 +156,12 @@ class Tag(collections.UserString):
         return cls(rev.split(":")[0]) if rev else None
 
     @property
-    def date(self):
+    def date(self) -> Optional[dt.datetime]:
         """
         Parse the date of the tag
 
         Returns:
-            datetime: The tag parsed as a datetime object.
+            The tag parsed as a datetime object.
         """
         if not hasattr(self, "_date"):
             try:
@@ -274,7 +274,7 @@ class Notes(collections.abc.Sequence):
     def __len__(self):
         return len(self._notes)
 
-    def filter(self, attr, value, match=False):
+    def filter(self, attr, value, match=False) -> Notes:
         """Filter notes by an attribute
 
         Args:
@@ -284,11 +284,11 @@ class Notes(collections.abc.Sequence):
                 match against it.
 
         Returns:
-            `Notes`: The filtered notes.
+            The filtered notes.
         """
         return Notes([note for note in self if _equals(getattr(note, attr), value, match=match)])
 
-    def exclude(self, attr, value, match=False):
+    def exclude(self, attr, value, match=False) -> Notes:
         """Exclude notes by an attribute
 
         Args:
@@ -298,7 +298,7 @@ class Notes(collections.abc.Sequence):
                 match against it.
 
         Returns:
-            `Notes`: The excluded commits.
+            The excluded commits.
         """
         return Notes(
             [note for note in self if not _equals(getattr(note, attr), value, match=match)]
@@ -311,7 +311,7 @@ class Notes(collections.abc.Sequence):
         descending_keys=False,
         none_key_first=False,
         none_key_last=False,
-    ):
+    ) -> collections.OrderedDict[str, Notes]:
         """Group notes by an attribute
 
         Args:
@@ -324,8 +324,7 @@ class Notes(collections.abc.Sequence):
             none_key_last (bool, default=False): Make the "None" key be last.
 
         Returns:
-            `collections.OrderedDict`: A dictionary of `Notes` keyed on
-            groups.
+            A dictionary of `Notes` keyed on groups.
         """
         if any([ascending_keys, descending_keys]) and not any([none_key_first, none_key_last]):
             # If keys are sorted, default to making the "None" key last
@@ -489,7 +488,7 @@ class NoteRange(Notes):
         )
 
 
-def detail(path=None):
+def detail(path: Optional[str] = None) -> Tuple[str, formaldict.FormalDict]:
     """
     Creates or updates a note
 
@@ -498,21 +497,21 @@ def detail(path=None):
             If provided, the note will be updated.
 
     Returns:
-        subprocess.CompletedProcess: The result from running
-        git commit. Returns the git pre-commit hook results if
-        failing during hook execution.
+        The result from running git commit. Returns the git pre-commit
+        hook results if failing during hook execution.
     """
     defaults = {}
     if path:
         with open(path) as f:
             defaults = yaml.safe_load(f.read())
     else:
-        now = dt.datetime.utcnow()
-        path = (
+        now = dt.datetime.now(dt.timezone.utc)
+        autopath = (
             utils.get_detail_note_root()
             / f'{now.strftime("%Y-%m-%d")}-{str(uuid.uuid4())[:6]}.yaml'
         )
-        path.parent.mkdir(exist_ok=True, parents=True)
+        autopath.parent.mkdir(exist_ok=True, parents=True)
+        path = str(autopath)
 
     schema = _load_note_schema()
     entry = schema.prompt(defaults=defaults)
@@ -524,7 +523,7 @@ def detail(path=None):
     return path, entry
 
 
-def lint(range=""):
+def lint(range="") -> Tuple[bool, Notes]:
     """
     Lint notes against a range (branch, sha, etc).
 
@@ -569,7 +568,7 @@ def log(
     after=None,
     reverse=False,
     output=None,
-):
+) -> str:
     """
     Renders notes.
 
@@ -604,7 +603,7 @@ def log(
             the range and multiple pull requests are found.
 
     Returns:
-        str: The rendered log.
+        The rendered log.
     """
     notes = NoteRange(
         range=range,

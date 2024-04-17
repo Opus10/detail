@@ -3,14 +3,13 @@
 Most of the test coverage of the core module is from the integration
 tests in detail/tests/test_integration.py.
 """
+
 from contextlib import ExitStack as does_not_raise
 from unittest import mock
 
 import pytest
 
-from detail import core
-from detail import exceptions
-
+from detail import core, exceptions
 
 # A valid user schema
 valid_schema = """
