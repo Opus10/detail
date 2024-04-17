@@ -1,13 +1,13 @@
 """Tests for the detail.github module"""
-from contextlib import ExitStack as does_not_raise
+
 import json
+from contextlib import ExitStack as does_not_raise
 from unittest import mock
 
 import pytest
 import requests
 
-from detail import exceptions
-from detail import github
+from detail import exceptions, github
 
 
 @pytest.fixture(autouse=True)

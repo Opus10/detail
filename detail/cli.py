@@ -9,6 +9,7 @@ Commands
 * ``detail log`` - Renders templated notes
 * ``detail lint`` - Validates structure of notes
 """
+
 import sys
 
 import click

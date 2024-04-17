@@ -1,4 +1,5 @@
 """Tests the detail.utils() module"""
+
 from detail import utils
 
 
