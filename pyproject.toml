@@ -23,7 +23,7 @@ name = "detail"
 packages = [
   { include = "detail" },
 ]
-version = "0.2.2"
+version = "0.2.3"
 description = "Build automations off of structured notes in your project"
 authors = ["Opus 10 Engineering"]
 classifiers = [
