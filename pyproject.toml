@@ -70,6 +70,7 @@ mkdocstrings-python = "1.9.2"
 footing = "*"
 setuptools = "*"
 poetry-core = "*"
+typing-extensions = "4.11.0"
 
 [tool.poetry.scripts]
 detail = 'detail.cli:main'
