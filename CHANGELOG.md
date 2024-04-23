@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.4 (2024-04-22)
+
+### Trivial
+
+  - Fixed doc and CI issues. [Wes Kendall, bed7e7c]
+
 ## 0.2.3 (2024-04-18)
 
 ### Trivial
