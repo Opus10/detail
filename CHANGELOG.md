@@ -1,33 +1,39 @@
 # Changelog
 
+## 0.2.5 (2024-08-24)
+
+#### Changes
+
+  - Updated docs styling and testing dependencies by [@wesleykendall](https://github.com/wesleykendall) in [#9](https://github.com/Opus10/detail/pull/9).
+
 ## 0.2.4 (2024-04-22)
 
-### Trivial
+#### Trivial
 
   - Fixed doc and CI issues. [Wes Kendall, bed7e7c]
 
 ## 0.2.3 (2024-04-18)
 
-### Trivial
+#### Trivial
 
   - Fix devops script. [Wes Kendall, d006b54]
   - Upgrade with the latest Python template and migrate to MkDocs. [Wes Kendall, 42440de]
 
 ## 0.2.2 (2022-08-20)
 
-### Trivial
+#### Trivial
 
   - Fix release note rendering and code formatting changes [Wes Kendall, 3a94793]
 
 ## 0.2.1 (2022-07-31)
 
-### Trivial
+#### Trivial
 
   - Update with the latest Python template, fixing doc builds [Wes Kendall, 17df8b2]
 
 ## 0.2.0 (2022-03-22)
 
-### Feature
+#### Feature
 
   - Change linting behavior, passing if no commits exist [Wes Kendall, 47b4908]
 
@@ -37,13 +43,13 @@
 
 ## 0.1.1 (2022-03-21)
 
-### Trivial
+#### Trivial
 
   - Added docs and a small tutorial [Wes Kendall, fa2972d]
 
 ## 0.1.0 (2022-03-21)
 
-### Feature
+#### Feature
 
   - V1 of detail [Wes Kendall, 2e077ec]
 
