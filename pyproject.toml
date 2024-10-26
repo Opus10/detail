@@ -24,7 +24,7 @@ name = "detail"
 packages = [
   { include = "detail" },
 ]
-version = "0.2.5"
+version = "0.3.0"
 description = "Build automations off of structured notes in your project"
 authors = ["Wes Kendall"]
 classifiers = [
