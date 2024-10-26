@@ -1,7 +1,7 @@
 _extensions:
 - jinja2_time.TimeExtension
 _template: https://github.com/Opus10/python-library-template
-_version: f4840f3f2382a912a6730a6520061e4fcc274ca1
+_version: f0aafbff5c138aa9d3051d6b5d612a7dd1a74914
 check_types_in_ci: 'False'
 is_django: 'False'
 module_name: detail
