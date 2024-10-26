@@ -4,4 +4,4 @@ Welcome to the docs for `detail`! It doesn't appear that the author has created 
 
 ## Compatibility
 
-`detail` is compatible with Python 3.8 - 3.12.
+`detail` is compatible with Python 3.9 - 3.13.
