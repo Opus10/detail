@@ -4,7 +4,7 @@
 
 #### Changes
 
-  - Added Python 3.13 support, dropped Python 3.8 support by [@wesleykendall](https://github.com/wesleykendall) in [#{}](https://github.com/Opus10/{}/pull/{}).
+  - Added Python 3.13 support, dropped Python 3.8 support by [@wesleykendall](https://github.com/wesleykendall) in [#10](https://github.com/Opus10/detail/pull/10).
 
 ## 0.2.5 (2024-08-24)
 
